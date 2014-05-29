@@ -10,12 +10,32 @@
 {% block head_title %}Edit Problem Description (Markdown){% endblock %}
 
 
-
 {% block other_assets %}
+
+<script type='text/javascript' src="{{ base_url('assets/epiceditor/js/epiceditor.min.js') }}"></script>
 <script type='text/javascript' src="{{ base_url('assets/js/taboverride.min.js') }}"></script>
 <script>
+var opts = {
+  container: 'epiceditor',
+  textarea: 'md_editor',
+  basePath: 'epiceditor',
+  clientSideStorage: true,
+  localStorageName: 'epiceditor',
+  useNativeFullscreen: true,
+  parser: marked,
+  theme: {
+    base: "{{ base_url('assets/epiceditor/themes/base/epiceditor.css') }}",
+    preview: "{{ base_url('assets/epiceditor/themes/preview/github.css') }}",
+    editor: "{{ base_url('assets/epiceditor/themes/editor/epic-dark.css') }}"
+  },
+  autogrow: {
+          minHeight: 350,
+	  maxHeight: 350
+        }
+}
 $(document).ready(function(){
 	tabOverride.set(document.getElementById('md_editor'));
+	var editor = new EpicEditor(opts).load();
 });
 </script>
 {% endblock %}
@@ -177,8 +197,9 @@ Violets are blue.
 	</p>
 	{{ form_open("problems/edit/md/#{description_assignment.id}/#{problem.id}") }}
 	<p class="input_p">
-		<textarea dir="auto" name="text" rows="30" cols="75" class="sharif_input" id="md_editor">{{ problem.description }}</textarea>
+		<textarea dir="auto" name="text" rows="30" cols="75" class="sharif_input" id="md_editor" style="display:none">{{ problem.description }}</textarea>
 	</p>
+	<div id="epiceditor"></div>
 	<p class="input_p">
 		<input type="submit" value="Save" class="sharif_input"/>
 	</p>
