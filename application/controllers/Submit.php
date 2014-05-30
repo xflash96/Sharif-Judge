@@ -65,6 +65,14 @@ class Submit extends CI_Controller
 
 	// ------------------------------------------------------------------------
 
+	public function _valid_ext($type)
+	{
+		switch ($type) {
+			case 'c': return TRUE;
+			case 'cpp': return TRUE;
+			default: return FALSE;
+		}
+	}
 
 	public function _match($type, $extension)
 	{
@@ -99,7 +107,6 @@ class Submit extends CI_Controller
 	public function index()
 	{
 		$this->form_validation->set_rules('problem', 'problem', 'required|integer|greater_than[0]', array('greater_than' => 'Select a %s.'));
-		$this->form_validation->set_rules('language', 'language', 'required|callback__check_language', array('_check_language' => 'Select a valid %s.'));
 
 		if ($this->form_validation->run())
 		{
@@ -163,8 +170,10 @@ class Submit extends CI_Controller
 				$this->problem = $item;
 				break;
 			}
-		$this->filetype = $this->_language_to_type(strtolower(trim($this->input->post('language'))));
 		$this->ext = substr(strrchr($_FILES['userfile']['name'],'.'),1); // uploaded file extension
+		if ( ! $this->_valid_ext($this->ext) )
+			show_error('Only .c and .cpp files are supported');
+		$this->filetype = $this->ext;
 		$this->file_name = basename($_FILES['userfile']['name'], ".{$this->ext}"); // uploaded file name without extension
 		if ( $this->queue_model->in_queue($this->user->username,$this->user->selected_assignment['id'], $this->problem['id']) )
 			show_error('You have already submitted for this problem. Your last submission is still in queue.');
@@ -185,8 +194,8 @@ class Submit extends CI_Controller
 			show_error('No file chosen.');
 		if ( ! in_array($this->filetype, $filetypes))
 			show_error('This file type is not allowed for this problem.');
-		if ( ! $this->_match($this->filetype, $this->ext) )
-			show_error('This file type does not match your selected language.');
+//		if ( ! $this->_match($this->filetype, $this->ext) )
+//			show_error('This file type does not match your selected language.');
 		if ( ! preg_match('/^[a-zA-Z0-9_\-()]+$/', $this->file_name) )
 			show_error('Invalid characters in file name.');
 

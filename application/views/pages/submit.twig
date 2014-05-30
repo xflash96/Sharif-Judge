@@ -15,17 +15,6 @@
 <script>
 	shj.p={};
 	{{ problems_js|raw }}
-	$(document).ready(function(){
-		$("select#problems").change(function(){
-			var v = $(this).val();
-			$('select#languages').empty();
-			$('<option value="0" selected="selected">-- Select Language --</option>').appendTo('select#languages');
-			if (v==0)
-				return;
-			for (var i=0;i<shj.p[v].length;i++)
-				$('<option value="'+shj.p[v][i]+'">'+shj.p[v][i]+'</option>').appendTo('select#languages');
-		});
-	});
 </script>
 {% endblock %}
 
@@ -47,13 +36,6 @@
 			{% endfor %}
 		</select>
 		{{ form_error('problem','<div class="shj_error">','</div>') }}
-	</p>
-	<p class="input_p">
-		<label for="languages" class="tiny">Language:</label>
-		<select id="languages" name="language" class="sharif_input">
-			<option value="0" selected="selected">-- Select Language --</option>
-		</select>
-		{{ form_error('language','<div class="shj_error">','</div>') }}
 	</p>
 	<p class="input_p">
 		<label for="file" class="tiny">File:</label>

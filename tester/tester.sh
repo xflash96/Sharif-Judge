@@ -178,6 +178,9 @@ shj_log "Language: $EXT"
 shj_log "Time Limit: $TIMELIMIT s"
 shj_log "Memory Limit: $MEMLIMIT kB"
 shj_log "Output size limit: $OUTLIMIT bytes"
+if [[ $EXT = "c" ]]; then
+	C_OPTIONS="$C_OPTIONS"' -std=c99'
+fi
 if [[ $EXT = "c" || $EXT = "cpp" ]]; then
 	shj_log "EasySandbox: $SANDBOX_ON"
 	shj_log "C/C++ Shield: $C_SHIELD_ON"
