@@ -561,6 +561,10 @@ for((i=1;i<=TST;i++)); do
 	else
 		shj_log "WRONG"
 		echo "<span class=\"shj_r\">WRONG</span>" >>$PROBLEMPATH/$UN/result.html
+		echo "<span class=\"shj_r\">Input:</span>" >>$PROBLEMPATH/$UN/result.html
+		cat $PROBLEMPATH/in/input$i.txt >>$PROBLEMPATH/$UN/result.html
+		echo "<span class=\"shj_r\">Answer:</span>" >>$PROBLEMPATH/$UN/result.html
+		cat $PROBLEMPATH/out/output$i.txt >>$PROBLEMPATH/$UN/result.html
 	fi
 done
 
